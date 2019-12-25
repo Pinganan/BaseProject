@@ -16,9 +16,6 @@
         crossorigin=""></script>
     <script>
         function $i(id) { return document.getElementById(id); }
-        function $n(id) { return document.getElementsByName(name); }
-        function $c(id) { return document.getElementsByClass(className); }
-        function $t(id) { return document.getElementsByClass(tagName); }
     </script>
     <!--使用jQuery操作dom-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -67,7 +64,7 @@
             var radius = position.accuracy / 2;
             L.marker(position.latlng).addTo(map)
                 .bindPopup("You are within " + radius + " meters from this point").openPopup();
-            L.circle(position.latlng, { color: '#00ccff', weight: 1, fillOpacity: 0.5, radius: radius }).addTo(map);
+            L.circle(position.latlng, { color: '#00ccff', weight: 1, fillOpacity: 0.3, radius: radius }).addTo(map);
             lat = position.latitude;
             long = position.longitude;
         }

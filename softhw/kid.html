@@ -10,9 +10,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script>
         function $i(id) { return document.getElementById(id); }
-        function $n(id) { return document.getElementsByName(name); }
-        function $c(id) { return document.getElementsByClass(className); }
-        function $t(id) { return document.getElementsByClass(tagName); }
     </script>
 </head>
 
@@ -29,6 +26,7 @@
                 <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <button onclick="getLocation()">開始使用定位功能</button>
+                        <p id="waytime">今日最晚出門時間: </p>
                         <br>
                         <br>
                         <button disabled id="write" onclick="window.open('PositioningSystem_write.html')">紀錄路線</button>
@@ -46,7 +44,8 @@
                                 href="http://www.openstreetmap.org/?lat=24.176&lon=120.648&zoom=10&layers=M&mlat=24.97120&mlon=120.21765">ViewLarger
                                 Map</a></small>
                         <script>
-
+                            var PositionSchool;
+                            var schooltime = 0;
                             function getLocation() {
                                 if (navigator.geolocation) {
                                     navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -63,7 +62,20 @@
                                 $i("write").disabled = false;
                                 $i("favorite").disabled = false;
                                 $i("watch").disabled = false;
-
+                                if (schooltime == 1) {
+                                    if (position.coords.latitude <= 24.184 && position.coords.latitude >= 24.178) {//24.181, 24.178
+                                        if (position.coords.longitude <= 120.656 && position.coords.longitude >= 120.643) {
+                                            PositionSchool = 1;
+                                        }
+                                        else {
+                                            PositionSchool = -1;
+                                        }
+                                    }
+                                    else {
+                                        PositionSchool = -1;
+                                    }
+                                    schooltime = 0;
+                                }
                             }
 
                             function showError(error) {
@@ -85,10 +97,7 @@
                         </script>
                         <script>
                             var PositionGoout;
-                            var ClasstableTime=8;
-                        </script>
-                        <script>
-                            var PositionSchool;
+                            var ClasstableTime = 8;
                         </script>
                     </div>
                 </div>
@@ -135,44 +144,53 @@
                 </div>
                 <div id="collapse4" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <select>
-                            <option value="1">8點</option>
-                            <option value="2">9點</option>
-                            <option value="3">10點</option>
-                            <option value="4">11點</option>
+                        <select id="oneday">
+                            <option value="8">8點</option>
+                            <option value="9">9點</option>
+                            <option value="10">10點</option>
+                            <option value="11">11點</option>
                         </select>
-                        <select>
-                            <option value="1">8點</option>
-                            <option value="2">9點</option>
-                            <option value="3">10點</option>
-                            <option value="4">11點</option>
+                        <select id="twoday">
+                            <option value="8">8點</option>
+                            <option value="9">9點</option>
+                            <option value="10">10點</option>
+                            <option value="11">11點</option>
                         </select>
-                        <select>
-                            <option value="1">8點</option>
-                            <option value="2">9點</option>
-                            <option value="3">10點</option>
-                            <option value="4">11點</option>
+                        <select id="threeday">
+                            <option value="8">8點</option>
+                            <option value="9">9點</option>
+                            <option value="10">10點</option>
+                            <option value="11">11點</option>
                         </select>
-                        <select>
-                            <option value="1">8點</option>
-                            <option value="2">9點</option>
-                            <option value="3">10點</option>
-                            <option value="4">11點</option>
+                        <select id="fourday">
+                            <option value="8">8點</option>
+                            <option value="9">9點</option>
+                            <option value="10">10點</option>
+                            <option value="11">11點</option>
                         </select>
-                        <select>
-                            <option value="1">8點</option>
-                            <option value="2">9點</option>
-                            <option value="3">10點</option>
-                            <option value="4">11點</option>
+                        <select id="fiveday">
+                            <option value="8">8點</option>
+                            <option value="9">9點</option>
+                            <option value="10">10點</option>
+                            <option value="11">11點</option>
                         </select>
-                        <button onclick="">上課時間點</button>
+                        <button onclick="TableTime()">上課時間點</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        function message(){
+        function TableTime() {
+            localStorage.setItem("PositionTabletime1", document.getElementById("oneday").value);
+            localStorage.setItem("PositionTabletime2", document.getElementById("twoday").value);
+            localStorage.setItem("PositionTabletime3", document.getElementById("threeday").value);
+            localStorage.setItem("PositionTabletime4", document.getElementById("fourday").value);
+            localStorage.setItem("PositionTabletime5", document.getElementById("fiveday").value);
+        }
+    </script>
+    <script>
+        function message() {
             var SickMessage; //傳生病訊息給通知
             SickMessage = document.getElementById("input-temp").value;
             localStorage.setItem("SickMessage", SickMessage);
@@ -181,12 +199,12 @@
     <script>
         function Tto_goout_message() {
             var PositionGoout = localStorage.getItem("PositionGoout");
-            
+
             if (PositionGoout == 1) {
                 alert("It's last moment.You should go out!");
                 localStorage.setItem("PositionGoout", "0");
             }
-            else{
+            else {
                 localStorage.setItem("PositionGoout", "0");
             }
         }
@@ -194,16 +212,48 @@
 
         function Leavekid() {
             var AnnounceParentanswer = localStorage.getItem("AnnounceParentanswer");
-            if(parseInt(AnnounceParentanswer)  == 1){
+            if (parseInt(AnnounceParentanswer) == 1) {
                 alert("your parents said yes");
                 localStorage.setItem("AnnounceParentanswer", '0');
             }
-            else if(parseInt(AnnounceParentanswer) == -1){
-                alert("your parents said fuck you");
+            else if (parseInt(AnnounceParentanswer) == -1) {
+                alert("your parents said NO");
                 localStorage.setItem("AnnounceParentanswer", '0');
             }
         }
         setInterval("Leavekid()", 1000);
+    </script>
+    <script>
+        var tablehour, tableminute;
+        switch (new Date().getDay()) {
+            case 1:
+                tablehour = parseInt(localStorage.getItem("PositionTabletime1")); break;
+            case 2:
+                tablehour = parseInt(localStorage.getItem("PositionTabletime2")); break;
+            case 3:
+                tablehour = parseInt(localStorage.getItem("PositionTabletime3")); break;
+            case 4:
+                tablehour = parseInt(localStorage.getItem("PositionTabletime4")); break;
+            case 5:
+                tablehour = parseInt(localStorage.getItem("PositionTabletime5")); break;
+        }
+        tablehour--;
+        tableminute = 60 - 5 - parseInt(localStorage.getItem("PositionWaytime" ));
+        document.getElementById("waytime").innerHTML = "今日最晚出門時間: " + tablehour +":"+ tableminute;
+        setInterval(checkTime(),60000);
+        function checkTime() {
+            if (today.getHours() == tablehour) {
+                if (today.getMinutes() == tableminute) {
+                    getLocation();
+                }
+            }
+            if (today.getHours() == goouthour) {
+                if (today.getMinutes() == gooutminute) {
+                    localStorage.setItem("PositionGoout", "1");
+                    PositionGoout = localStorage.getItem("PositionGoout");
+                }
+            }
+        }
     </script>
 </body>
 

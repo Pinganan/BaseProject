@@ -19,7 +19,7 @@
 <body>
 
     <div class="container">
-        <h2>篇章1</h2>
+        <h2>parent</h2>
         <div class="panel-group" id="accordion">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -39,7 +39,7 @@
                     <div class="panel-body">
                         <h3>父母端</h3>
                         <form>
-                        <div class="form-group">
+                            <div class="form-group">
                                 <textarea type="number" class="form-control" placeholder="回傳的訊息" rows="20" cols="30"
                                     disabled></textarea><br>
                                 <label for="select-temp">請選擇答覆</label>
@@ -90,16 +90,16 @@
         </div>
     </div>
     <script>
-        function Announce(){
+        function Announce() {
             var value = localStorage.getItem("ApGrade");
             var ApGrade = parseInt(value);
-            if(ApGrade == 1){
+            if (ApGrade == 1) {
                 var Grade_trans = localStorage.getItem("Grade");
                 var grade = parseInt(Grade_trans);
                 grade += 1;
                 window.localStorage.setItem("Grade", grade);
             }
-            else if(ApGrade == -1){
+            else if (ApGrade == -1) {
                 var Grade_trans = localStorage.getItem("Grade");
                 var grade = parseInt(Grade_trans);
                 grade -= 1;
@@ -109,19 +109,19 @@
         }
         setInterval(Announce(), 3000);
 
-        function AwardCheck(num){
-            if(num == 1){
+        function AwardCheck(num) {
+            if (num == 1) {
                 var awardandard = document.getElementById("awardandard").value;
                 window.localStorage.setItem("AwardAndard", awardandard);
             }
-            else if(num == 2){
+            else if (num == 2) {
                 var punishandard = document.getElementById("punishandard").value;
                 window.localStorage.setItem("PunishAndard", punishandard);
             }
-            else if(num == 3){
+            else if (num == 3) {
                 //slow~
             }
-            else{
+            else {
                 var reduce = parseInt(localStorage.getItem("Grade"));
                 var a = parseInt(localStorage.getItem("AwardAndard"));
                 reduce -= a;
@@ -137,44 +137,56 @@
                 localStorage.setItem("ApGrade", "1");
                 localStorage.setItem("PositionSchool", "0");
             }
-            else if(PositionSchool == -1){
+            else if (PositionSchool == -1) {
                 alert("your kid bad bad");
                 localStorage.setItem("ApGrade", "-1");
                 localStorage.setItem("PositionSchool", "0");
             }
-            else{
+            else {
                 localStorage.setItem("ApGrade", "0");
             }
         }
         setInterval(Tconfirm_message(), 1000);
     </script>
     <script>
-        var AnnounceReward;
+        function ToReward() {
+            var Grade = parseInt(localStorage.getItem("Grade"));
+            var AwardAndard = parseInt(localStorage.getItem("AwardAndard"));
+            var PunishAndard = parseInt(localStorage.getItem("PunishAndard"));
+            if(Grade == AwardAndard) {
+                localStorage.setItem("AnnounceReward", "1");
+            }
+            else if(Grade == PunishAndard) {
+                localStorage.setItem("AllBlack", "1");
+            }
+        }
     </script>
     <script>
         function Reward() {
-            var AnnounceReward = localStorage.getItem("AnnounceReward");
+            var AnnounceReward = parseInt(localStorage.getItem("AnnounceReward"));
             if (AnnounceReward == 1) {
                 alert("You can reward your kid!");
                 localStorage.setItem("AnnounceReward", "0");
             }
-            else{
+            else {
                 localStorage.setItem("AnnounceReward", "0");
             }
         }
         setInterval(Reward(), 1000);
+        
+       
 
         function Leaveparent() {
             const SickMessage = localStorage.getItem("SickMessage");
 
-            if(SickMessage != ''){
-                var panter_answer = confirm( SickMessage + 'yes or no');
+            if (SickMessage != '') {
+                var panter_answer = confirm(SickMessage + 'yes or no');
                 localStorage.setItem("SickMessage", '');
 
                 if (panter_answer == true) {
-                alert("ok! your answer is Yes!");
-                localStorage.setItem("Apgrade", '1');
-                localStorage.setItem("AnnounceParentanswer", '1');
+                    alert("ok! your answer is Yes!");
+                    localStorage.setItem("Apgrade", '1');
+                    localStorage.setItem("AnnounceParentanswer", '1');
                 }
                 else {
                     alert("ok! your answer is No!");

@@ -21,39 +21,12 @@
             margin: 10px 0;
         }
 
-        .darker {
-            border-color: #ccc;
-            background-color: #ddd;
-        }
-
-        .container::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
         .container img {
             float: left;
             max-width: 60px;
             width: 100%;
             margin-right: 20px;
             border-radius: 50%;
-        }
-
-        .container img.right {
-            float: right;
-            margin-left: 20px;
-            margin-right: 0;
-        }
-
-        .time-right {
-            float: right;
-            color: 'gray';
-        }
-
-        .time-left {
-            float: left;
-            color: #999;
         }
     </style>
 </head>
@@ -65,33 +38,51 @@
         <div class="container">
             <input type="radio" name="location" value="1" checked> 路線1
             <img src="fav_icon2.png" style="width:100%;">
-            <p>路線1所需時間: 20 min， 最晚出門時刻: 07 時 45 分</p>
+            <p>路線1所需時間: 20 min</p>
         </div>
 
         <div class="container">
             <input type="radio" name="location" value="2"> 路線2
             <img src="fav_icon1.png" style="width:100%;">
-            <p>路線2所需時間: 30 min， 最晚出門時刻: 07 時 35 分</p>
+            <p>路線2所需時間: 30 min</p>
         </div>
         <div class="container">
             <input type="radio" name="location" value="3"> 路線3
             <img src="fav_icon1.png" style="width:100%;">
-            <p>路線3所需時間: 15 min， 最晚出門時刻: 07 時 50 分</p>
+            <p>路線3所需時間: 15 min</p>
         </div>
         <div class="container">
             <input type="radio" name="location" value="4"> 路線4
             <img src="fav_icon1.png" style="width:100%;">
-            <p>路線4所需時間:  5 min， 最晚出門時刻: 08 時 00 分</p>
+            <p>路線4所需時間: 5 min</p>
         </div>
         <div>
-            <span style="float: right;"><button>提交</button></span>
-        </div>
-        <p id="test"></p>
-        <script>
-            $('input[type=radio]').change(function () {
-                alert("已選擇路線"+$(this).val())
-            });
-        </script>
+            <h1 id="waytime"></h1>
+            <script>
+
+                var waytime = [20, 30, 15, 5];
+                localStorage.setItem("PositionWaytime", waytime[0]);
+                $('input[type=radio]').change(function () {
+                    alert("已選擇路線" + $(this).val())
+                    localStorage.setItem("PositionWaytime", waytime[$(this).val() - 1]);
+                });
+                var tablehour, tableminute;
+                switch (new Date().getDay()) {
+                    case 1:
+                        tablehour = parseInt(localStorage.getItem("PositionTabletime1")); break;
+                    case 2:
+                        tablehour = parseInt(localStorage.getItem("PositionTabletime2")); break;
+                    case 3:
+                        tablehour = parseInt(localStorage.getItem("PositionTabletime3")); break;
+                    case 4:
+                        tablehour = parseInt(localStorage.getItem("PositionTabletime4")); break;
+                    case 5:
+                        tablehour = parseInt(localStorage.getItem("PositionTabletime5")); break;
+                }
+                tablehour--;
+                tableminute = 60 - 5 - parseInt(localStorage.getItem("PositionWaytime"));
+                //document.getElementById("waytime").innerHTML = "今日最晚出門時間: " + tablehour + ":" + tableminute;
+            </script>
     </form>
 </body>
 

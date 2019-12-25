@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>kids page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        function $i(id) { return document.getElementById(id); }
+        function $n(id) { return document.getElementsByName(name); }
+        function $c(id) { return document.getElementsByClass(className); }
+        function $t(id) { return document.getElementsByClass(tagName); }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>kid</h2>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">定位(孩子)</a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <button onclick="getLocation()">開始使用定位功能</button>
+                        <br>
+                        <br>
+                        <button disabled id="write" onclick="window.open('PositioningSystem_write.html')">紀錄路線</button>
+                        <button disabled id="favorite"
+                            onclick="window.open('PositioningSystem_favorite.html')">加入最愛</button>
+                        <button disabled id="watch" onclick="window.open('PositioningSystem_watch.html')">查看路線</button>
+                        <p id="location"><br><br></p>
+                        <!--顯示地圖-->
+                        <iframe id="mapid" frameborder="0" height="512" marginheight="0" marginwidth="0" scrolling="no"
+                            src="http://www.openstreetmap.org/export/embed.html?bbox=120.5502,24.0715,120.74,24.26&layer=mapnik"
+                            style="border: 1px solid black;" width="512">
+                        </iframe>
+                        <br>
+                        <small><a
+                                href="http://www.openstreetmap.org/?lat=24.176&lon=120.648&zoom=10&layers=M&mlat=24.97120&mlon=120.21765">ViewLarger
+                                Map</a></small>
+                        <script>
+
+                            function getLocation() {
+                                if (navigator.geolocation) {
+                                    navigator.geolocation.getCurrentPosition(showPosition, showError);
+                                } else {
+                                    $i("location").innerHTML = "Geolocation is not supported by this browser.該瀏覽器不支援地理位置定位。";
+                                }
+                            }
+
+                            function showPosition(position) {
+                                $i("location").innerHTML = "緯度(Latitude) : " + position.coords.latitude.toFixed(2) +
+                                    "<br>經度(Longitude) : " + position.coords.longitude.toFixed(2);
+                                //更新地圖的圖標
+                                changeMap(position.coords.latitude, position.coords.longitude);
+                                $i("write").disabled = false;
+                                $i("favorite").disabled = false;
+                                $i("watch").disabled = false;
+
+                            }
+
+                            function showError(error) {
+                                $i("write").disabled = true;
+                                $i("favorite").disabled = true;
+                                $i("watch").disabled = true;
+                                var errorTypes = {
+                                    0: "不明原因錯誤。",
+                                    1: "未開啟定位，請重試。",
+                                    2: "無法取得位置資訊。",
+                                    3: "位置查詢逾時。"
+                                };
+                                var error = errorTypes[error.code];
+                                $i("location").innerHTML = error + "<br>";
+                            }
+                            function changeMap(latitude, longitude) {
+                                $i("mapid").src = "http://www.openstreetmap.org/export/embed.html?bbox=120.5502,24.0715,120.74,24.26&layer=mapnik&marker=" + latitude + "," + longitude;
+                            }
+                        </script>
+                        <script>
+                            var PositionGoout;
+                            var ClasstableTime=8;
+                        </script>
+                        <script>
+                            var PositionSchool;
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">有病</a>
+                    </h4>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <h3>子女端</h3>
+                        <form>
+                            <div class="form-group">
+                                <textarea type="number" class="form-control" id="input-temp" placeholder="請輸入請假訊息"
+                                    rows="20" cols="30"></textarea>
+                                <br>
+                                <input type="file" name="myFile">
+                            </div>
+                            <br><button type="button" onclick="message()">送出</button>
+                        </form>
+                        <span id="result"></span><br>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">賞罰</a>
+                    </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <h1>還敢點R</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">課表設定</a>
+                    </h4>
+                </div>
+                <div id="collapse4" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <select>
+                            <option value="1">8點</option>
+                            <option value="2">9點</option>
+                            <option value="3">10點</option>
+                            <option value="4">11點</option>
+                        </select>
+                        <select>
+                            <option value="1">8點</option>
+                            <option value="2">9點</option>
+                            <option value="3">10點</option>
+                            <option value="4">11點</option>
+                        </select>
+                        <select>
+                            <option value="1">8點</option>
+                            <option value="2">9點</option>
+                            <option value="3">10點</option>
+                            <option value="4">11點</option>
+                        </select>
+                        <select>
+                            <option value="1">8點</option>
+                            <option value="2">9點</option>
+                            <option value="3">10點</option>
+                            <option value="4">11點</option>
+                        </select>
+                        <select>
+                            <option value="1">8點</option>
+                            <option value="2">9點</option>
+                            <option value="3">10點</option>
+                            <option value="4">11點</option>
+                        </select>
+                        <button onclick="">上課時間點</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function message(){
+            var SickMessage; //傳生病訊息給通知
+            SickMessage = document.getElementById("input-temp").value;
+            localStorage.setItem("SickMessage", SickMessage);
+        }
+    </script>
+    <script>
+        function Tto_goout_message() {
+            var PositionGoout = localStorage.getItem("PositionGoout");
+            
+            if (PositionGoout == 1) {
+                alert("It's last moment.You should go out!");
+                localStorage.setItem("PositionGoout", "0");
+            }
+            else{
+                localStorage.setItem("PositionGoout", "0");
+            }
+        }
+        setInterval(Tto_goout_message(), 1000);
+
+        function Leavekid() {
+            var AnnounceParentanswer = localStorage.getItem("AnnounceParentanswer");
+            if(parseInt(AnnounceParentanswer)  == 1){
+                alert("your parents said yes");
+                localStorage.setItem("AnnounceParentanswer", '0');
+            }
+            else if(parseInt(AnnounceParentanswer) == -1){
+                alert("your parents said fuck you");
+                localStorage.setItem("AnnounceParentanswer", '0');
+            }
+        }
+        setInterval("Leavekid()", 1000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .container {
+            border: 2px solid #dedede;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .darker {
+            border-color: #ccc;
+            background-color: #ddd;
+        }
+
+        .container::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .container img {
+            float: left;
+            max-width: 60px;
+            width: 100%;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+
+        .container img.right {
+            float: right;
+            margin-left: 20px;
+            margin-right: 0;
+        }
+
+        .time-right {
+            float: right;
+            color: 'gray';
+        }
+
+        .time-left {
+            float: left;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>這是將路線加入最愛的網頁</h2>
+    <form>
+        <div class="container">
+            <input type="radio" name="location" value="1" checked> 路線1
+            <img src="fav_icon2.png" style="width:100%;">
+            <p>路線1所需時間: 20 min， 最晚出門時刻: 07 時 45 分</p>
+        </div>
+
+        <div class="container">
+            <input type="radio" name="location" value="2"> 路線2
+            <img src="fav_icon1.png" style="width:100%;">
+            <p>路線2所需時間: 30 min， 最晚出門時刻: 07 時 35 分</p>
+        </div>
+        <div class="container">
+            <input type="radio" name="location" value="3"> 路線3
+            <img src="fav_icon1.png" style="width:100%;">
+            <p>路線3所需時間: 15 min， 最晚出門時刻: 07 時 50 分</p>
+        </div>
+        <div class="container">
+            <input type="radio" name="location" value="4"> 路線4
+            <img src="fav_icon1.png" style="width:100%;">
+            <p>路線4所需時間:  5 min， 最晚出門時刻: 08 時 00 分</p>
+        </div>
+        <div>
+            <span style="float: right;"><button>提交</button></span>
+        </div>
+        <p id="test"></p>
+        <script>
+            $('input[type=radio]').change(function () {
+                alert("已選擇路線"+$(this).val())
+            });
+        </script>
+    </form>
+</body>
+
+</html>

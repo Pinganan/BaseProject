@@ -17,7 +17,7 @@
     <div class="container">
         <h2>kid</h2>
         <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
+            <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">定位(孩子)</a>
@@ -26,7 +26,6 @@
                 <div id="collapse1" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <button onclick="getLocation()">開始使用定位功能</button>
-                        <p id="waytime">今日最晚出門時間: </p>
                         <br>
                         <br>
                         <button disabled id="write" onclick="window.open('PositioningSystem_write.html')">紀錄路線</button>
@@ -102,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">有病</a>
@@ -124,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">賞罰</a>
@@ -136,46 +135,61 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">課表設定</a>
                     </h4>
                 </div>
                 <div id="collapse4" class="panel-collapse collapse">
+                    <table class="table">
+                        <th>周一</th>
+                        <th>周二</th>
+                        <th>周三</th>
+                        <th>周四</th>
+                        <th>周五</th>
+                        <tr>
+                            <th><select id="oneday">
+                                    <option value="8">8點</option>
+                                    <option value="9">9點</option>
+                                    <option value="10">10點</option>
+                                    <option value="11">11點</option>
+                                </select>
+                            </th>
+                            <th><select id="twoday">
+                                    <option value="8">8點</option>
+                                    <option value="9">9點</option>
+                                    <option value="10">10點</option>
+                                    <option value="11">11點</option>
+                                </select>
+                            </th>
+                            <th><select id="threeday">
+                                    <option value="8">8點</option>
+                                    <option value="9">9點</option>
+                                    <option value="10">10點</option>
+                                    <option value="11">11點</option>
+                                </select>
+                            </th>
+                            <th><select id="fourday">
+                                    <option value="8">8點</option>
+                                    <option value="9">9點</option>
+                                    <option value="10">10點</option>
+                                    <option value="11">11點</option>
+                                </select>
+                            </th>
+                            <th><select id="fiveday">
+                                    <option value="8">8點</option>
+                                    <option value="9">9點</option>
+                                    <option value="10">10點</option>
+                                    <option value="11">11點</option>
+                                </select>
+                            </th>
+                        </tr>
+                    </table>
                     <div class="panel-body">
-                        <select id="oneday">
-                            <option value="8">8點</option>
-                            <option value="9">9點</option>
-                            <option value="10">10點</option>
-                            <option value="11">11點</option>
-                        </select>
-                        <select id="twoday">
-                            <option value="8">8點</option>
-                            <option value="9">9點</option>
-                            <option value="10">10點</option>
-                            <option value="11">11點</option>
-                        </select>
-                        <select id="threeday">
-                            <option value="8">8點</option>
-                            <option value="9">9點</option>
-                            <option value="10">10點</option>
-                            <option value="11">11點</option>
-                        </select>
-                        <select id="fourday">
-                            <option value="8">8點</option>
-                            <option value="9">9點</option>
-                            <option value="10">10點</option>
-                            <option value="11">11點</option>
-                        </select>
-                        <select id="fiveday">
-                            <option value="8">8點</option>
-                            <option value="9">9點</option>
-                            <option value="10">10點</option>
-                            <option value="11">11點</option>
-                        </select>
-                        <button onclick="TableTime()">上課時間點</button>
+                        <button style="float: right;" onclick="TableTime()">上課時間點</button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -238,9 +252,9 @@
                 tablehour = parseInt(localStorage.getItem("PositionTabletime5")); break;
         }
         tablehour--;
-        tableminute = 60 - 5 - parseInt(localStorage.getItem("PositionWaytime" ));
-        document.getElementById("waytime").innerHTML = "今日最晚出門時間: " + tablehour +":"+ tableminute;
-        setInterval(checkTime(),60000);
+        tableminute = 60 - 5 - parseInt(localStorage.getItem("PositionWaytime"));
+        document.getElementById("waytime").innerHTML = "今日最晚出門時間: " + tablehour + ":" + tableminute;
+        setInterval(checkTime(), 60000);
         function checkTime() {
             if (today.getHours() == tablehour) {
                 if (today.getMinutes() == tableminute) {

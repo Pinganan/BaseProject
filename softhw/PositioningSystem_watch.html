@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>watch</title>
+    <title>查看預設路線</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--leaflet-->
@@ -26,24 +26,41 @@
 
     <style>
         #mapid {
-            width: 512px;
+            width: 775px;
             height: 512px;
             border: 1px solid black;
+        }
+
+        body {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+            background-image: url(fav_icon1.png);
+            background-size: 300px;
+        }
+
+        .container {
+            border: 2px solid #f5f0a8;
+            background-color: #fffdec;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
         }
     </style>
 </head>
 
 <body>
-    <h2>這是查看路線的網頁，上傳檔案後地圖會顯示路徑。</h2>
-    <input type="file" id="upload_input" />
-    <pre id="upload_showcsv"></pre>
-    <button id="button">顯示目前位置</button>
-    <h1 id="result"></h1>
-    <p id="location"></p>
-    <div id="mapid"></div>
+    <div class="container">
+        <h2>上傳檔案後地圖會顯示路徑。</h2>
+        <h3 id="now"></h3>
+        <input type="file" id="upload_input" />
+        <button id="button">顯示目前位置</button>
+        <h3 id="result"></h3>
+        <p id="location"></p>
+        <div id="mapid"></div>
+    </div>
     <script>
         var map = L.map('mapid').setView([24.175, 120.645], 13);
-        var lat, long;
         var LeafIcon = L.Icon.extend({
             options: {
                 iconSize: [70, 70],
@@ -51,8 +68,11 @@
                 popupAnchor: [-1, -45]
             }
         });
+        var PositionWay = localStorage.getItem("PositionWay");//0~3
+        var num = parseInt(PositionWay, 10) + 1;
         var blueIcon = new LeafIcon({ iconUrl: 'startpoint.png' });
         var redIcon = new LeafIcon({ iconUrl: 'destination.png' });
+        document.getElementById("now").innerHTML = "目前預設路線為：路線" + num;
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: '<a href="https://www.openstreetmap.org/fixthemap?lat=24.15928427005674&amp;lon=120.64292907714845&amp;zoom=10">Report a problem</a> | ' +
@@ -65,8 +85,6 @@
             L.marker(position.latlng).addTo(map)
                 .bindPopup("You are within " + radius + " meters from this point").openPopup();
             L.circle(position.latlng, { color: '#00ccff', weight: 1, fillOpacity: 0.3, radius: radius }).addTo(map);
-            lat = position.latitude;
-            long = position.longitude;
         }
 
         function onLocationError(error) {
@@ -91,17 +109,13 @@
         $(document).ready(function () {
             //綁定change事件，讀xlsx檔
             $('#upload_input').on('change', function (e) {
-
                 //取得上傳第一個檔案
                 var files = e.target.files;
                 var f = files[0];
-
                 //使用FileReader讀檔
                 var reader = new FileReader();
-
                 //檔案名稱
                 var name = f.name;
-
                 //onload觸發事件
                 reader.onload = function (e) {
                     //對象內資料
@@ -112,10 +126,10 @@
                     //顯示內容
                     //$('#upload_showjson').html(JSON.stringify(retjson, null, '\t'));
                     //$('#upload_showcsv').html(retcsv);
-
                 };
                 //以BinaryString讀入
                 reader.readAsBinaryString(f);
+                document.getElementById("upload_input").disabled = true;
 
             });
         });

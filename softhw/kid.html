@@ -44,6 +44,9 @@
                                 Map</a></small>
                         <script>
                             var PositionSchool;
+                            var PositionRecord;
+                            localStorage.setItem("PositionRecord", "20");
+                            localStorage.setItem("PositionWay", "0");
                             var schooltime = 0;
                             function getLocation() {
                                 if (navigator.geolocation) {
@@ -239,6 +242,7 @@
     </script>
     <script>
         var tablehour, tableminute;
+        var goouthour, gooutminute;
         switch (new Date().getDay()) {
             case 1:
                 tablehour = parseInt(localStorage.getItem("PositionTabletime1")); break;
@@ -251,9 +255,10 @@
             case 5:
                 tablehour = parseInt(localStorage.getItem("PositionTabletime5")); break;
         }
+        goouthour = tablehour;
+        gooutminute = 0;
         tablehour--;
         tableminute = 60 - 5 - parseInt(localStorage.getItem("PositionWaytime"));
-        document.getElementById("waytime").innerHTML = "今日最晚出門時間: " + tablehour + ":" + tableminute;
         setInterval(checkTime(), 60000);
         function checkTime() {
             if (today.getHours() == tablehour) {

@@ -56,13 +56,7 @@
     <div id="mapid"></div>
   </div>
   <script>
-    var PositionRecord;
-    //此兩個變數初始設置應移到kid.html
-    localStorage.setItem("PositionRecord", "20");
-    localStorage.setItem("PositionWay", "0");
-    //
     var record = localStorage.getItem("PositionRecord").split(",");
-    //
     var map = L.map('mapid').setView([24.175, 120.645], 13);
     var latjud, lonjud;
     var watchID;

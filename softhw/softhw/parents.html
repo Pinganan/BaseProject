@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>parents page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        function $i(id) { return document.getElementById(id); }
+        function $n(id) { return document.getElementsByName(name); }
+        function $c(id) { return document.getElementsByClass(className); }
+        function $t(id) { return document.getElementsByClass(tagName); }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>parent</h2>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">定位(孩子)</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">有病</a>
+                    </h4>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <h3>父母端</h3>
+                        <form>
+                            <div class="form-group">
+                                <textarea type="number" class="form-control" placeholder="回傳的訊息" rows="20" cols="30"
+                                    disabled></textarea><br>
+                                <label for="select-temp">請選擇答覆</label>
+                                <select class="form-control" id="select-temp" onchange="check()">
+                                    <option value="1" selected>可以</option>
+                                    <option value="2">不行</option>
+                                </select>
+                            </div>
+                            <br><button type="button" onclick="check()">送出</button>
+                        </form>
+                        <span id="parent-result"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">賞罰</a>
+                    </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>這裡是設定獎勵分數 <button onclick="AwardCheck(1)">change set</button></p>
+                        <select id="awardandard">
+                            <option value="60">能60就偷笑惹</option>
+                            <option value="70">70應該也不算太難吧</option>
+                            <option value="80">80似乎也還是可以</option>
+                            <option value="90">90應該是基本吧</option>
+                            <option value="100">全勤再說話R</option>
+                        </select>
+                        <br><br>
+                        <p>這裡是設定懲罰分數 <button onclick="AwardCheck(2)">change set</button></p>
+                        <select id="punishandard">
+                            <option value="-5">能-5就偷笑惹</option>
+                            <option value="-10">-10也不過爾爾</option>
+                            <option value="-15">-15偷笑爾爾好惹</option>
+                            <option value="-20">-20非爾能觸及之境</option>
+                        </select>
+                        <br><br>
+                        <p>說好的APP呢 <button onclick="AwardCheck(3)">change set</button></p>
+                        <input id="aaa" type="text">
+                        <br><br>
+                        <p>說好的獎勵你還記得嗎</p>
+                        <button onclick="AwardCheck(4)">08災亞阿啦</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        localStorage.setItem("Grade",0);
+    </script>
+    <script>
+        //獎勵種類確認
+        function AwardCheck(num) {
+            if (num == 1) {
+                var awardandard = document.getElementById("awardandard").value;
+                window.localStorage.setItem("AwardAndard", awardandard);
+            }
+            else if (num == 2) {
+                var punishandard = document.getElementById("punishandard").value;
+                window.localStorage.setItem("PunishAndard", punishandard);
+            }
+            else if (num == 3) {
+                var AppAgree = document.getElementById("aaa").value;
+                localStorage.setItem("AppAgree", AppAgree);
+            }
+            else {
+                var reduce = parseInt(localStorage.getItem("Grade"));
+                var a = parseInt(localStorage.getItem("AwardAndard"));
+                if (reduce >= a) {
+                    reduce -= a;
+                }
+                window.localStorage.setItem("Grade", reduce);
+            }
+        }
+    </script>
+    <script>
+        //到校提醒
+        function Tconfirm_message() {
+            var PositionSchool = localStorage.getItem("PositionSchool");
+            if (PositionSchool == 1) {
+                alert("your kid good good.");
+                localStorage.setItem("ApGrade", "1");
+                localStorage.setItem("PositionSchool", "0");
+            }
+            else if (PositionSchool == -1) {
+                alert("your kid bad bad");
+                localStorage.setItem("ApGrade", "-1");
+                localStorage.setItem("PositionSchool", "0");
+            }
+        }
+        setInterval("Tconfirm_message()", 1000);
+    </script>
+    <script>
+        //生病核准與否
+        function Leaveparent() {
+            const SickMessage = localStorage.getItem("SickMessage");
+            if (SickMessage != '') {
+                var panter_answer = confirm(SickMessage + ' yes or no');
+                localStorage.setItem("SickMessage", '');
+
+                if (panter_answer == true) {
+                    alert("ok! your answer is Yes!");
+                    localStorage.setItem("ApGrade", '1');
+                    localStorage.setItem("AnnounceParentanswer", '1');
+                }
+                else {
+                    alert("ok! your answer is No!");
+                    localStorage.setItem("ApGrade", '0');
+                    localStorage.setItem("AnnounceParentanswer", '-1');
+                }
+            }
+        }
+        setInterval("Leaveparent()", 1000);
+    </script>
+    <script>
+        //加或減分
+        function WhyAnnounce() {
+            var ApGrade = parseInt(localStorage.getItem("ApGrade"));
+            if (ApGrade == 1) {
+                var Grade = parseInt(localStorage.getItem("Grade"));
+                Grade = Grade + 1;
+                window.localStorage.setItem("Grade", Grade);
+                //加分才重新提醒一次
+                localStorage.setItem("YouChange", 0);
+            }
+            else if (ApGrade == -1) {
+                var Grade = parseInt(localStorage.getItem("Grade"));
+                Grade = Grade - 1;
+                window.localStorage.setItem("Grade", Grade);
+            }
+            localStorage.setItem("ApGrade", '0');
+        }
+        setInterval("WhyAnnounce()", 1000);
+
+        function Reward() {
+            var AnnounceReward = parseInt(localStorage.getItem("AnnounceReward"));
+            if (AnnounceReward == 1) {
+                alert("You can reward your kid!");
+                localStorage.setItem("AnnounceReward", "0");
+            }
+        }
+        setInterval("Reward()", 1000);
+
+        function ToReward() {
+            var Grade = parseInt(localStorage.getItem("Grade"));
+            var AwardAndard = parseInt(localStorage.getItem("AwardAndard"));
+            var PunishAndard = parseInt(localStorage.getItem("PunishAndard"));
+            var YouChange = parseInt(localStorage.getItem("YouChange"));
+
+            if (Grade >= AwardAndard && YouChange == 0) {
+                localStorage.setItem("AnnounceReward", "1");
+                localStorage.setItem("YouChange", 1);
+            }
+            else if (Grade == PunishAndard) {
+                localStorage.setItem("AllBlack", "1");
+            }
+            else {
+                localStorage.setItem("AllBlack", "0");
+            }
+
+            if (YouChange == 1) {
+                if (Grade < AwardAndard + 6) {
+                    localStorage.setItem("DeathCount",Grade - AwardAndard);
+                }
+                else if (Grade == AwardAndard + 6) {
+                    alert("System Error");
+                }
+            }
+        }
+        setInterval("ToReward()", 1000);    
+    </script>
+</body>
+
+</html>

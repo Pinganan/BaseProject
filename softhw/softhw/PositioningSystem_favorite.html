@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>選擇最愛的路線</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+            background-image: url(fav_icon2.png);
+            background-size: 300px;
+        }
+
+        .container {
+            border: 2px solid #f5f0a8;
+            background-color: #fffdec;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .container2 {
+            border: 2px solid #aca191;
+            background-color: #bebcb5;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .container img {
+            float: left;
+            max-width: 80px;
+            width: 100%;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container2">
+        <h2 id="now"></h2>
+        <form>
+            <div class="container">
+                <input type="radio" name="location" value="0"> 路線1
+                <img src="fav_icon1.png" style="width:100%;">
+                <p id="route0">路線1所需時間:</p>
+            </div>
+
+            <div class="container">
+                <input type="radio" name="location" value="1"> 路線2
+                <img src="fav_icon1.png" style="width:100%;">
+                <p id="route1">路線2所需時間:</p>
+            </div>
+            <div class="container">
+                <input type="radio" name="location" value="2"> 路線3
+                <img src="fav_icon1.png" style="width:100%;">
+                <p id="route2">路線3所需時間:</p>
+            </div>
+            <div class="container">
+                <input type="radio" name="location" value="3"> 路線4
+                <img src="fav_icon1.png" style="width:100%;">
+                <p id="route3">路線4所需時間:</p>
+            </div>
+            <button style="float:right" onclick="changechecked()">提交</button>
+            <p id="test"></p>
+            <h3 id="waytime"></h3>
+        </form>
+    </div>
+    <script>
+
+        var PositionWay = localStorage.getItem("PositionWay");//0~3
+        var PositionRecord = localStorage.getItem("PositionRecord").split(',');//此變數為陣列
+        changechecked();
+        print();
+        function changechecked() {
+            document.getElementById("route0").checked = true;
+            document.getElementById("route0").src = "fav_icon2.png";
+        }
+        function print() {
+            var num = parseInt(PositionWay, 10) + 1;
+            document.getElementById("now").innerHTML = "目前預設路線為：路線" + num;
+            for (i = 0; i < PositionRecord.length; i++) {
+                document.getElementById("route" + i).innerHTML = "路線" + (i + 1) + "所需時間: " + PositionRecord[i] + " min";
+            }
+
+        }
+        $('input[type=radio]').change(function () {
+            var num = parseInt($(this).val(), 10) + 1;
+            if ($(this).val() >= PositionRecord.length) {
+                alert("選擇路線為空！");
+            }
+            else {
+                PositionWay = $(this).val();
+                alert("已選擇路線" + num);
+                localStorage.setItem("PositionWay", PositionWay);
+                localStorage.setItem("PositionWaytime", PositionRecord[PositionWay]);
+            }
+            print();
+        });
+
+        var tablehour, tableminute;
+        setInterval(updateWaytime(), 3000);
+        function updateWaytime() {
+            switch (new Date().getDay()) {
+                case 1:
+                    tablehour = parseInt(localStorage.getItem("PositionTabletime1")); break;
+                case 2:
+                    tablehour = parseInt(localStorage.getItem("PositionTabletime2")); break;
+                case 3:
+                    tablehour = parseInt(localStorage.getItem("PositionTabletime3")); break;
+                case 4:
+                    tablehour = parseInt(localStorage.getItem("PositionTabletime4")); break;
+                case 5:
+                    tablehour = parseInt(localStorage.getItem("PositionTabletime5")); break;
+            }
+            tablehour--;
+            if (PositionWay < PositionRecord.length) {
+                tableminute = 60 - 5 - PositionRecord[PositionWay];
+                document.getElementById("waytime").innerHTML = "今日最晚出門時間: " + tablehour + ":" + tableminute;
+            }
+            else {
+                document.getElementById("waytime").innerHTML = "選擇路線為空！";
+            }
+
+        }
+    </script>
+</body>
+
+</html>

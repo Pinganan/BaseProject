@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>記錄個人路線</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--leaflet-->
+  <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+  <script>
+    function $i(id) { return document.getElementById(id); }
+  </script>
+
+  <style>
+    #mapid {
+      width: 775px;
+      height: 512px;
+      border: 1px solid black;
+    }
+
+    body {
+      margin: 0 auto;
+      max-width: 800px;
+      padding: 0 20px;
+      background-image: url(fav_icon1.png);
+      background-size: 300px;
+    }
+
+    .container {
+      border: 2px solid #f5f0a8;
+      background-color: #fffdec;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>點擊開始後持續記錄定位。</h2>
+    <input type="button" id="startbutton" value="開始">
+    <input type="button" id="endbutton" value="停止" disabled>
+    <p id="Check_Txt">總共時間：<span id="Check_i">0小時0分0秒</span></p>
+    <p id="result"></p>
+    <p id="location"></p>
+    <div id="mapid"></div>
+  </div>
+  <script>
+    var record = localStorage.getItem("PositionRecord").split(",");
+    var map = L.map('mapid').setView([24.175, 120.645], 13);
+    var latjud, lonjud;
+    var watchID;
+    var stopflag = 0, startflag = 0;
+    var totaltime;
+    var geolocation = navigator.geolocation;
+    var LeafIcon = L.Icon.extend({
+      options: {
+        iconSize: [70, 70],
+        iconAnchor: [36, 68],
+        popupAnchor: [-1, -45]
+      }
+    });
+    var blueIcon = new LeafIcon({ iconUrl: 'startpoint.png' });
+    var redIcon = new LeafIcon({ iconUrl: 'destination.png' });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '<a href="https://www.openstreetmap.org/fixthemap?lat=24.15928427005674&amp;lon=120.64292907714845&amp;zoom=10">Report a problem</a> | ' +
+        '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      id: 'openstreetmap'
+    }).addTo(map);
+
+    function onLocationFound(position) {
+      var radius = position.accuracy / 2;
+      L.circle(position.latlng, { color: '#00ccff', weight: 1, fillOpacity: 0.5, radius: 5 }).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+      $i("location").innerHTML = "緯度(Latitude) : " + position.latitude.toFixed(4) +
+        "<br>經度(Longitude) : " + position.longitude.toFixed(4);
+      if (startflag == 0) {
+        L.marker(position.latlng, { icon: blueIcon }).addTo(map)
+          .bindPopup("This is your starting point.").openPopup();
+        startflag = 1;
+      }
+      latjud = position.latitude;
+      lonjud = position.longitude;
+      if (latjud <= 24.184 && latjud >= 24.176) {      //24.181, 24.178
+        if (lonjud <= 120.656 && lonjud >= 120.643) {//120.650, 120.646
+          if (stopflag == 1) {
+            L.marker(position.latlng, { icon: redIcon }).addTo(map)
+              .bindPopup("This is your destination.").openPopup();
+            geolocation.clearWatch(watchID);
+            record.push(totaltime);
+            if (record.length > 4) {
+              record.length = 4;
+              alert("路線欄位已滿，此筆資料無法紀錄，按下確定3秒後關閉此頁面。")
+            }
+            else {
+              PositionRecord = record.join(',');
+              localStorage.setItem("PositionRecord", PositionRecord);
+              alert("總共時間: " + totaltime + "分鐘\n記錄成功，按下確定3秒後關閉此頁面。");
+
+            }
+            setTimeout("closeWindow()", 3000);
+          }
+        } else {
+          if (stopflag == 1) {
+            alert("記錄失敗，目前定位不在學校範圍內。");
+            closeWindow();
+          }
+        }
+      } else {
+        if (stopflag == 1) {
+          alert("記錄失敗，目前定位不在學校範圍內。");
+          closeWindow();
+        }
+      }
+    }
+
+    function onLocationError(error) {
+      var errorTypes = {
+        0: "不明原因錯誤。",
+        1: "使用者拒絕提供位置資訊。",
+        2: "無法取得位置資訊。",
+        3: "位置查詢逾時。"
+      };
+      var error = errorTypes[error.code];
+      alert(error);
+      closeWindow();
+    }
+    function closeWindow() {
+      window.close();
+    }
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+    $i("startbutton").onclick = function () {
+      $i("startbutton").value = "正在紀錄位置"; //變更按鈕顯示
+      $i("startbutton").disabled = true;
+      $i("endbutton").disabled = false;
+      watchID = map.locate({ watch: true, setView: false, maxZoom: 16, enableHighAccuracy: true, maximumAge: 10, timeout: 60000 });
+      timer = window.setInterval("Check_Time()", 1000);
+    }
+    $i("endbutton").onclick = function () {
+      window.clearInterval(timer);
+      stopflag = 1;
+      $i("endbutton").disabled = true;
+      $i("startbutton").value = "開始";
+    }
+    var timer;
+    var SetMinute = 0;
+    function Check_Time() {
+      SetMinute += 1;
+      var Check_i = document.getElementById("Check_i");
+
+      var Cal_Hour = Math.floor(SetMinute / 3600);
+      var Cal_Minute = Math.floor(Math.floor(SetMinute % 3600) / 60);
+      var Cal_Second = SetMinute % 60;
+
+      Check_i.innerHTML = Cal_Hour + "小時" + Cal_Minute + "分" + Cal_Second + "秒";
+      totaltime = Cal_Hour * 60 + Cal_Minute;
+    }
+  </script>
+</body>
+
+</html>
